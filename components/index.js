@@ -1,0 +1,5 @@
+export {default as Slide} from './Onboarding/Slide'
+export {default as Footer} from './Onboarding/Footer'
+export {default as Question} from './Quiz/Question'
+export {default as Responses} from './Quiz/Responses'
+export {default as Header} from './Quiz/Header'

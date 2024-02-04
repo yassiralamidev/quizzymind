@@ -1,20 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer } from '@react-navigation/native';
+import StackNavigation from './navigation/StackNavigator';
 
 export default function App() {
+  const [isAppFirstLaunched, setIsAppFirstLaunched] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const appData = await AsyncStorage.getItem('isAppFirstLaunched');
+        if (appData === null || appData === 'true') {
+          setIsAppFirstLaunched(true);
+          await AsyncStorage.setItem('isAppFirstLaunched', 'false');
+        } else {
+          setIsAppFirstLaunched(false);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+    return () => {
+
+    };
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    isAppFirstLaunched !== null && (
+      <NavigationContainer>
+        <StackNavigation isAppFirstLaunched={isAppFirstLaunched}/>
+      </NavigationContainer>
+    )
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
